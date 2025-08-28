@@ -17,19 +17,20 @@ if "historial" not in st.session_state:
 opcion = st.radio("📌 Selecciona el tipo de conversión:", 
                   ("Celsius ➝ Fahrenheit", "Fahrenheit ➝ Celsius"))
 
-# Entrada de temperatura única
-valor = st.number_input("🌡️ Ingresa una temperatura:", value=0.0, step=0.1)
+# Entrada de temperatura como número entero
+valor = st.number_input("🌡️ Ingresa una temperatura (solo enteros):", 
+                        value=0, step=1, format="%d")
 
 # Botón para convertir
 if st.button("🔄 Convertir"):
     if opcion == "Celsius ➝ Fahrenheit":
-        resultado = (valor * 9/5) + 32
-        mensaje = f"{valor:.2f} °C ➝ {resultado:.2f} °F"
+        resultado = int((valor * 9/5) + 32)   # Conversión redondeada a entero
+        mensaje = f"{valor} °C ➝ {resultado} °F"
         st.success(f"✅ {mensaje}")
         st.session_state["historial"].append(("°C a °F", valor, resultado))
     else:
-        resultado = (valor - 32) * 5/9
-        mensaje = f"{valor:.2f} °F ➝ {resultado:.2f} °C"
+        resultado = int((valor - 32) * 5/9)   # Conversión redondeada a entero
+        mensaje = f"{valor} °F ➝ {resultado} °C"
         st.success(f"✅ {mensaje}")
         st.session_state["historial"].append(("°F a °C", valor, resultado))
 
@@ -43,12 +44,4 @@ if st.session_state["historial"]:
                       columns=["Conversión", "Ingresado", "Resultado"])
     st.dataframe(df, use_container_width=True)
 
-    # Botón para borrar historial
-    if st.button("🗑️ Borrar historial"):
-        st.session_state["historial"] = []
-        st.info("Historial borrado.")
-else:
-    st.info("ℹ️ Aún no tienes conversiones registradas.")
-
-st.divider()
-st.caption("Desarrollado con ❤️ usando Streamlit")
+    # Bo
