@@ -43,3 +43,22 @@ if st.button("🔄 Convertir"):
         if valor < 32:
             st.snow()
         elif valor > 90:
+            st.balloons()
+
+# Mostrar historial si existe
+if st.session_state["historial"]:
+    st.divider()
+    st.subheader("📜 Historial de Conversiones")
+
+    df = pd.DataFrame(st.session_state["historial"], 
+                      columns=["Conversión", "Ingresado", "Resultado"])
+    st.dataframe(df, use_container_width=True)
+
+    if st.button("🗑️ Borrar historial"):
+        st.session_state["historial"] = []
+        st.info("Historial borrado.")
+else:
+    st.info("ℹ️ Aún no tienes conversiones registradas.")
+
+st.divider()
+st.caption("Desarrollado con ❤️ y 🎉 usando Streamlit")
