@@ -14,9 +14,9 @@ st.divider()
 opcion = st.radio("📌 Selecciona el tipo de conversión:", 
                   ("Celsius ➝ Fahrenheit", "Fahrenheit ➝ Celsius"))
 
-# Entrada de temperatura (con slider y caja numérica sincronizados)
+# Entrada manual con number_input
 if opcion == "Celsius ➝ Fahrenheit":
-    celsius = st.slider("🌡️ Temperatura en °C", -50.0, 100.0, 25.0, 0.1)
+    celsius = st.number_input("🌡️ Ingresa la temperatura en °C:", value=0.0, step=0.1)
     fahrenheit = (celsius * 9/5) + 32
     st.success(f"✅ {celsius:.2f} °C equivale a {fahrenheit:.2f} °F")
 
@@ -29,7 +29,7 @@ if opcion == "Celsius ➝ Fahrenheit":
         st.error("🔥 ¡Hace calor, mantente hidratado!")
 
 else:
-    fahrenheit = st.slider("🌡️ Temperatura en °F", -60.0, 212.0, 77.0, 0.1)
+    fahrenheit = st.number_input("🌡️ Ingresa la temperatura en °F:", value=32.0, step=0.1)
     celsius = (fahrenheit - 32) * 5/9
     st.success(f"✅ {fahrenheit:.2f} °F equivale a {celsius:.2f} °C")
 
@@ -44,5 +44,3 @@ else:
 # Línea final
 st.divider()
 st.caption("Desarrollado con ❤️ usando Streamlit")
-
-
