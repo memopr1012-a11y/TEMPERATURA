@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 # Configuración de la página
 st.set_page_config(page_title="Conversor de Temperatura", page_icon="🌡️")
@@ -14,32 +15,31 @@ st.divider()
 opcion = st.radio("📌 Selecciona el tipo de conversión:", 
                   ("Celsius ➝ Fahrenheit", "Fahrenheit ➝ Celsius"))
 
-# Entrada manual con number_input
-if opcion == "Celsius ➝ Fahrenheit":
-    celsius = st.number_input("🌡️ Ingresa la temperatura en °C:", value=0.0, step=0.1)
-    fahrenheit = (celsius * 9/5) + 32
-    st.success(f"✅ {celsius:.2f} °C equivale a {fahrenheit:.2f} °F")
+# Entrada de múltiples temperaturas
+st.markdown("✍️ Ingresa varias temperaturas separadas por comas (ejemplo: `0, 25, 100`).")
+entrada = st.text_input("Temperaturas:")
 
-    # Mensaje dinámico
-    if celsius < 0:
-        st.warning("❄️ Hace bastante frío, abrígate bien.")
-    elif celsius < 25:
-        st.info("🌤️ Temperatura agradable.")
-    else:
-        st.error("🔥 ¡Hace calor, mantente hidratado!")
+if entrada:
+    try:
+        # Convertir texto en lista de números
+        valores = [float(x.strip()) for x in entrada.split(",")]
 
+        # Procesar según la opción
+        if opcion == "Celsius ➝ Fahrenheit":
+            resultados = [(c, (c * 9/5) + 32) for c in valores]
+            df = pd.DataFrame(resultados, columns=["Celsius (°C)", "Fahrenheit (°F)"])
+        else:
+            resultados = [(f, (f - 32) * 5/9) for f in valores]
+            df = pd.DataFrame(resultados, columns=["Fahrenheit (°F)", "Celsius (°C)"])
+
+        # Mostrar tabla con resultados
+        st.success("✅ Conversión realizada:")
+        st.dataframe(df, use_container_width=True)
+
+    except ValueError:
+        st.error("⚠️ Asegúrate de ingresar solo números separados por comas.")
 else:
-    fahrenheit = st.number_input("🌡️ Ingresa la temperatura en °F:", value=32.0, step=0.1)
-    celsius = (fahrenheit - 32) * 5/9
-    st.success(f"✅ {fahrenheit:.2f} °F equivale a {celsius:.2f} °C")
-
-    # Mensaje dinámico
-    if fahrenheit < 32:
-        st.warning("❄️ Está helado, mucho cuidado.")
-    elif fahrenheit < 77:
-        st.info("🌤️ Clima templado y cómodo.")
-    else:
-        st.error("🔥 ¡Mucho calor, hidrátate!")
+    st.info("ℹ️ Esperando que ingreses temperaturas...")
 
 # Línea final
 st.divider()
