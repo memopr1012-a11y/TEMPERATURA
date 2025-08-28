@@ -17,31 +17,20 @@ if "historial" not in st.session_state:
 opcion = st.radio("📌 Selecciona el tipo de conversión:", 
                   ("Celsius ➝ Fahrenheit", "Fahrenheit ➝ Celsius"))
 
-# Entrada de temperatura como número entero
-valor = st.number_input("🌡️ Ingresa una temperatura (solo enteros):", 
-                        value=0, step=1, format="%d")
+# Entrada de temperatura (permite decimales o enteros)
+valor = st.number_input("🌡️ Ingresa una temperatura:", value=0.0, step=0.1)
 
 # Botón para convertir
 if st.button("🔄 Convertir"):
     if opcion == "Celsius ➝ Fahrenheit":
-        resultado = int((valor * 9/5) + 32)   # Conversión redondeada a entero
-        mensaje = f"{valor} °C ➝ {resultado} °F"
+        resultado = (valor * 9/5) + 32
+        mensaje = f"{valor:.2f} °C ➝ {resultado:.2f} °F"
         st.success(f"✅ {mensaje}")
-        st.session_state["historial"].append(("°C a °F", valor, resultado))
+        st.session_state["historial"].append(("°C a °F", f"{valor:.2f}", f"{resultado:.2f}"))
     else:
-        resultado = int((valor - 32) * 5/9)   # Conversión redondeada a entero
-        mensaje = f"{valor} °F ➝ {resultado} °C"
+        resultado = (valor - 32) * 5/9
+        mensaje = f"{valor:.2f} °F ➝ {resultado:.2f} °C"
         st.success(f"✅ {mensaje}")
-        st.session_state["historial"].append(("°F a °C", valor, resultado))
+        st.session_state["historial"].append(("°F a °C", f"{valor:.2f}", f"{resultado:.2f}"))
 
-# Mostrar historial si existe
-if st.session_state["historial"]:
-    st.divider()
-    st.subheader("📜 Historial de Conversiones")
-
-    # Convertir historial a DataFrame
-    df = pd.DataFrame(st.session_state["historial"], 
-                      columns=["Conversión", "Ingresado", "Resultado"])
-    st.dataframe(df, use_container_width=True)
-
-    # Bo
+# Mostrar historial si
