@@ -17,8 +17,9 @@ if "historial" not in st.session_state:
 opcion = st.radio("📌 Selecciona el tipo de conversión:", 
                   ("Celsius ➝ Fahrenheit", "Fahrenheit ➝ Celsius"))
 
-# Entrada de temperatura (soporta negativos y decimales)
-valor = st.number_input("🌡️ Ingresa una temperatura (puede ser negativa o con decimales):", value=0.0, step=0.1)
+# Entrada de temperatura con soporte para decimales
+valor = st.number_input("🌡️ Ingresa una temperatura (puede ser decimal o negativa):", 
+                        value=0.0, step=0.1, format="%.2f")
 
 # Botón para convertir
 if st.button("🔄 Convertir"):
@@ -30,10 +31,15 @@ if st.button("🔄 Convertir"):
 
         # Animaciones según la temperatura
         if valor < 0:
-            st.snow()  # Efecto nieve
+            st.snow()
         elif valor > 30:
-            st.balloons()  # Efecto globos
+            st.balloons()
     else:
         resultado = (valor - 32) * 5/9
         mensaje = f"{valor:.2f} °F ➝ {resultado:.2f} °C"
-        st.s
+        st.success(f"✅ {mensaje}")
+        st.session_state["historial"].append(("°F a °C", f"{valor:.2f}", f"{resultado:.2f}"))
+
+        if valor < 32:
+            st.snow()
+        elif valor > 90:
