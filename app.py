@@ -5,7 +5,7 @@ import pandas as pd
 st.set_page_config(page_title="Conversor de Temperatura", page_icon="🌡️")
 
 st.title("🌡️ Conversor de Temperatura")
-st.markdown("Convierte entre **Celsius y Fahrenheit** con historial interactivo y animaciones 🎉")
+st.markdown("Convierte entre **Celsius y Fahrenheit** con historial interactivo 🎉")
 
 st.divider()
 
@@ -17,35 +17,36 @@ if "historial" not in st.session_state:
 opcion = st.radio("📌 Selecciona el tipo de conversión:", 
                   ("Celsius ➝ Fahrenheit", "Fahrenheit ➝ Celsius"))
 
-# Entrada de temperatura con soporte para decimales
-valor = st.number_input("🌡️ Ingresa una temperatura (puede ser decimal o negativa):", 
-                        value=0.0, step=0.1, format="%.2f")
+# Entrada de temperatura como número entero
+valor = st.number_input("🌡️ Ingresa una temperatura (solo enteros):", 
+                        value=0, step=1, format="%d")
 
 # Botón para convertir
 if st.button("🔄 Convertir"):
     if opcion == "Celsius ➝ Fahrenheit":
-        resultado = (valor * 9/5) + 32
-        mensaje = f"{valor:.2f} °C ➝ {resultado:.2f} °F"
+        resultado = int((valor * 9/5) + 32)   # Redondea a entero
+        mensaje = f"{valor} °C ➝ {resultado} °F"
         st.success(f"✅ {mensaje}")
-        st.session_state["historial"].append(("°C a °F", f"{valor:.2f}", f"{resultado:.2f}"))
+        st.session_state["historial"].append(("°C a °F", valor, resultado))
 
-        # Animaciones según la temperatura
+        # Animaciones
         if valor < 0:
             st.snow()
         elif valor > 30:
             st.balloons()
+
     else:
-        resultado = (valor - 32) * 5/9
-        mensaje = f"{valor:.2f} °F ➝ {resultado:.2f} °C"
+        resultado = int((valor - 32) * 5/9)   # Redondea a entero
+        mensaje = f"{valor} °F ➝ {resultado} °C"
         st.success(f"✅ {mensaje}")
-        st.session_state["historial"].append(("°F a °C", f"{valor:.2f}", f"{resultado:.2f}"))
+        st.session_state["historial"].append(("°F a °C", valor, resultado))
 
         if valor < 32:
             st.snow()
         elif valor > 90:
             st.balloons()
 
-# Mostrar historial si existe
+# Mostrar historial
 if st.session_state["historial"]:
     st.divider()
     st.subheader("📜 Historial de Conversiones")
